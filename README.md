@@ -28,7 +28,6 @@ The three projects are:
 - `project3anomaly.py`: Script demonstrating temporal state detection on temporal networks of microservice calls for Project 3
 - `requirements.txt`: List of used libraries with specified versions
 
-
 ## Running the scripts
 
 The scripts were developed and tested on a Mac (UNIX) environment with Python 3.10.
