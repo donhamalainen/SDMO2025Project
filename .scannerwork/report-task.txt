@@ -1,0 +1,6 @@
+projectKey=SDMO2025Project
+serverUrl=http://localhost:9000
+serverVersion=25.10.0.114319
+dashboardUrl=http://localhost:9000/dashboard?id=SDMO2025Project
+ceTaskId=3bd9edb9-3dc1-4c7d-856a-4fe08d08261f
+ceTaskUrl=http://localhost:9000/api/ce/task?id=3bd9edb9-3dc1-4c7d-856a-4fe08d08261f
