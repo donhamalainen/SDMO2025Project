@@ -5,7 +5,7 @@ import json
 LMSTUDIO_API_URL = "http://localhost:1234/v1/chat/completions"
 
 
-def send_devs_and_get_similarity(path, threshold=0.7, model="openai/gpt-oss-20b"):
+def send_devs_and_get_similarity(path, threshold=0.7, model="llama-3-groq-8b-tool-use"):
     try:
         with open(path, newline="", encoding="utf-8") as csvfile:
             reader = csv.reader(csvfile)
@@ -21,6 +21,7 @@ def send_devs_and_get_similarity(path, threshold=0.7, model="openai/gpt-oss-20b"
             "Compare names, surnames, and email addresses when identifying duplicates. "
             "Return only a JSON array of the duplicate entries (not the unique ones). "
             "Do not add any explanation, just return the JSON array of duplicates."
+            "JSON Format: [{\"name\":\"John Doe\",\"email\":\"john@example.com\"}]"
         )
 
         # system_prompt = (
@@ -45,10 +46,16 @@ def send_devs_and_get_similarity(path, threshold=0.7, model="openai/gpt-oss-20b"
             "max_tokens": -1,
             "stream": False,
         }
-
         response = requests.post(LMSTUDIO_API_URL, json=data)
         response.raise_for_status()
         reply = response.json()["choices"][0]["message"]["content"]
+        start = reply.find('[')
+        end = reply.rfind(']') + 1
+        if start != -1 and end != 0:
+            json_part = reply[start:end]
+            result = json.loads(json_part)
+        else:
+            result = []
         # Yritetään tulkita vastaus JSONiksi
         result = json.loads(reply)
         print("Received JSON from LM Studio")
