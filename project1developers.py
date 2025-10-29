@@ -43,7 +43,6 @@ def process(dev):
     # Determine email prefix
     email: str = dev[1]
     prefix = email.split("@")[0]
-
     return name, first, last, i_first, i_last, email, prefix
 
 USE_LMSTUDIO = True
@@ -53,8 +52,6 @@ USE_LMSTUDIO = True
 # pairs to csv
 # If you provide a URL, it clones the repo, fetches the commits and then deletes it,
 # so for a big project better clone the repo locally and provide filesystem path
-
-
 
 if __name__ == "__main__": # Added if-sentence so tests dont run all the code when importing process function
     if USE_LMSTUDIO:
