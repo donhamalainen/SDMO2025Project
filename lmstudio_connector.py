@@ -14,26 +14,17 @@ def send_devs_and_get_similarity(path, threshold=0.7, model="llama-3-groq-8b-too
 
         # Rakennetaan system- ja user-promptit
         system_prompt = (
-            "You are a helpful assistant. "
-            "You will receive a list of developers as JSON, each with a name and email address. "
-            "Your task is to identify all developer entries that are likely duplicates (fluffy duplicates). "
-            "A fluffy duplicate means two or more entries refer to the same person, even if there are minor differences in name or email. "
-            "Compare names, surnames, and email addresses when identifying duplicates. "
-            "Return only a JSON array of the duplicate entries (not the unique ones). "
-            "Do not add any explanation, just return the JSON array of duplicates."
-            "JSON Format: [{\"name\":\"John Doe\",\"email\":\"john@example.com\"}]"
+            "You are a precise and efficient assistant for fuzzy duplicate detection. "
+            f"Use a similarity threshold of {threshold}. "
+            "You will receive a JSON list of developer objects, each containing 'name' and 'email'. "
+            "Your task is to identify entries that likely refer to the same person, even with minor differences "
+            "in spelling, formatting, or domain variations. These are called 'fluffy duplicates'. "
+            "When comparing entries, consider: first and last names (including common abbreviations), "
+            "email usernames and domains, and potential typographical variations. "
+            "Output only a JSON array of the detected duplicate groups, where each group contains the duplicate entries. "
+            "Do not include unique developers. Do not add explanations or text outside the JSON array."
         )
 
-        # system_prompt = (
-        #     "You are a helpful assistant. "
-        #     "You will receive a list of developers as JSON, each with a name and email address. "
-        #     "Your task is to identify all developer entries that are likely duplicates (fluffy duplicates). "
-        #     "A fluffy duplicate means two or more entries refer to the same person, even if there are minor differences in name or email. "
-        #     "Compare names, surnames, and email addresses when identifying duplicates. "
-        #     "Return only a JSON array of the duplicate pairs. "
-        #     "Each array element must be an object with two fields: 'name' (the duplicate) and 'matched_with' (the name or email it was matched to). "
-        #     "Do not add any explanation, just return the JSON array of duplicate pairs."
-        # )
         user_prompt = json.dumps(names, ensure_ascii=False)
 
         data = {
@@ -42,8 +33,6 @@ def send_devs_and_get_similarity(path, threshold=0.7, model="llama-3-groq-8b-too
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
             ],
-            "temperature": 0.0,
-            "max_tokens": -1,
             "stream": False,
         }
         response = requests.post(LMSTUDIO_API_URL, json=data)
